@@ -55,6 +55,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ContainerStack.cs" />
+    <Compile Include="Row.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -63,9 +65,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Container.cs" />
+    <Compile Include="Container\ContainerCoolable.cs" />
+    <Compile Include="Container\ContainerCoolableValuable.cs" />
+    <Compile Include="Container\ContainerNormal.cs" />
     <Compile Include="ContainerShip.cs" />
-    <Compile Include="Enums.cs" />
+    <Compile Include="Container\ContainerValuable.cs" />
+    <Compile Include="Container\IContainer.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
