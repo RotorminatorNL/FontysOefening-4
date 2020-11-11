@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Containerschip
 {
-    public class Row
+    public class ShipRow
     {
         private List<ContainerStack> _containerStacks;
 
-        public Row()
+        public ShipRow()
         {
 
         }

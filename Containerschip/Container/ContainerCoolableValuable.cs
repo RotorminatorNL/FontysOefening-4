@@ -15,7 +15,23 @@ namespace Containerschip
 
         public ContainerCoolableValuable(int weight)
         {
-            Weight = weight;
+            if (weight < 4000)
+            {
+                Weight = 4000;
+            }
+            else if (weight > 30000)
+            {
+                Weight = 30000;
+            }
+            else
+            {
+                Weight = weight;
+            }
+        }
+
+        public override string ToString()
+        {
+            return $"Koel- en kostbaar [gewicht: {Weight}]";
         }
     }
 }
