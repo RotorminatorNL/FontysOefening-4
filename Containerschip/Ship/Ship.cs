@@ -12,17 +12,29 @@ namespace Containerschip
          * - Calculate maxWeight (900): length (3) x width (2) x maxStackWeight (150)
          * - requiredWeight      (450): maxWeight (900) / 2 
          */
+        public readonly int Length;
+        public readonly int Width;
+
+        private List<IContainer> _containers;
         private readonly int _maxWeight;
         private readonly int _requiredWeight;
-        private List<IContainer> _containers;
 
         public Ship(List<IContainer> containers, int length, int width)
         {
+            Length = length;
+            Width = width;
+
             _containers = containers;
-            _maxWeight = length * width * 150;
+            _maxWeight = Length * Width * 150;
             _requiredWeight = _maxWeight / 2;
 
+            SortContainerList();
             DistributeContainers();
+        }
+
+        private void SortContainerList()
+        {
+
         }
 
         private void DistributeContainers()

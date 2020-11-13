@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Containerschip
@@ -24,7 +25,7 @@ namespace Containerschip
         {
             int containerWeight = GetContainerWeight(TbxContainerWeight);
             Button btnPressed = (Button)sender;
-            if (containerWeight != 0 && GetContainerName(btnPressed) is string containerName)
+            if (containerWeight != 0 && btnPressed.Name.Substring(3) is string containerName)
             {
                 switch (containerName)
                 {
@@ -58,14 +59,8 @@ namespace Containerschip
         {
             if (_containers.Count != 0)
             {
-
-                int shipLength = GetShipAttribute(TbxShipLength);
-                int shipWidth = GetShipAttribute(TbxShipWidth);
-
-                if (shipLength != 0 && shipWidth != 0)
-                {
-                    _ship = new Ship(_containers, shipLength, shipWidth);
-                }
+                InitializeShip();
+                ShowShipLayout(GetShipLayout());
             }
             else
             {
@@ -84,6 +79,73 @@ namespace Containerschip
                     _containers.Remove(selectedContainer);
                     UpdateListContent();
                 }
+            }
+        }
+
+        private void BtnStack(object sender, RoutedEventArgs e)
+        {
+            Button selectedStack = (Button)sender;
+            MessageBox.Show($"U selecteer: {selectedStack.Content}");
+        }
+
+        private void InitializeShip()
+        {
+            int shipLength = GetShipAttribute(TbxShipLength);
+            int shipWidth = GetShipAttribute(TbxShipWidth);
+
+            if (shipLength != 0 && shipWidth != 0)
+            {
+                _ship = new Ship(_containers, shipLength, shipWidth);
+            }
+        }
+
+        private List<DockPanel> GetShipLayout()
+        {
+            List<DockPanel> shipRows = GetShipRows(_ship.Width);
+            for (int i = 0; i < shipRows.Count; i++)
+            {
+                shipRows[i] = AddStacksToRow(shipRows[i], _ship.Length);
+            }
+            return shipRows;
+        }
+
+        private List<DockPanel> GetShipRows(int amountRows)
+        {
+            List<DockPanel> shipRows = new List<DockPanel>();
+            for (int i = 0; i < amountRows; i++)
+            {
+                DockPanel row = new DockPanel
+                {
+                    Name = $"Row_{i+1}"
+                };
+                shipRows.Add(row);
+            }
+            return shipRows;
+        }
+
+        private DockPanel AddStacksToRow(DockPanel row, int amountStacks)
+        {
+            for (int i = 0; i < amountStacks; i++)
+            {
+                string[] splitRowName = row.Name.Split('_');
+                Button button = new Button
+                {
+                    Content = $"Stack {splitRowName[1]}.{i+1}",
+                    FontSize = 20,
+                    Width = 160
+                };
+                button.Click += BtnStack;
+                row.Children.Add(button);
+            }
+            return row;
+        }
+
+        private void ShowShipLayout(List<DockPanel> shipRows)
+        {
+            SpShipLayout.Children.Clear();
+            foreach (DockPanel row in shipRows)
+            {
+                SpShipLayout.Children.Add(row);
             }
         }
 
@@ -141,11 +203,6 @@ namespace Containerschip
             return 0;
         }
 
-        private string GetContainerName(Button btn)
-        {
-            return btn.Name.Substring(3);
-        }
-
         private int GetShipAttribute(TextBox tbx)
         {
             if (IsInputValid(tbx))
@@ -159,7 +216,6 @@ namespace Containerschip
         {
             try
             {
-                tbx.BorderBrush = Brushes.Black;
                 if (Convert.ToInt32(tbx.Text) > 0)
                 {
                     HideError(tbx);

@@ -29,7 +29,7 @@
                     </StackPanel>
                 </DockPanel>
                 <ListBox Name="LbxContainers" FontSize="25" Height="322" Margin="0,0,0,10" SelectionChanged="LbxContainers_SelectionChanged"></ListBox>
-                
+
                 <Rectangle Fill="Black" Height="5"/>
                 <Label Content="Schip info" FontSize="40"/>
                 <Rectangle Fill="Black" Height="5" Margin="0,0,0,10"/>
@@ -44,13 +44,30 @@
                     <TextBox Name="TbxShipWidth" BorderBrush="Black" BorderThickness="0,1" FontSize="25" Height="50" Text="0" Padding="0,0,5,0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
                 </DockPanel>
 
-                <Button Name="BtnCalculateLayout" BorderBrush="Black" BorderThickness="0,2" Content="Bereken inleding" FontSize="35" Height="60" Margin="0,10,0,0" Click="BtnCalculateLayout_Click"/>
+                <Button Name="BtnCalculateLayout" BorderBrush="Black" BorderThickness="0,2" Content="Bereken indeling" FontSize="35" Height="60" Margin="0,10,0,0" Click="BtnCalculateLayout_Click"/>
             </StackPanel>
             <Rectangle Fill="Black" Width="2"/>
             <StackPanel>
                 <Label Content="Indeling schip" FontSize="40"/>
                 <Rectangle Fill="Black" Height="5"/>
-                
+                <Label Content="stacks ->" FontSize="30" HorizontalAlignment="Center"/>
+                <DockPanel>
+                    <Label Content="Rows ->" FontSize="30" Height="50" Margin="-35,0,-75,0" RenderTransformOrigin="0.5,0.5">
+                        <Label.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="90"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Label.RenderTransform>
+                    </Label>
+                    <Border BorderBrush="Black" BorderThickness="1" Height="300" Width="1000">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Center" Height="300" Width="1000">
+                            <StackPanel Name="SpShipLayout" HorizontalAlignment="Left" VerticalAlignment="Center"></StackPanel>
+                        </ScrollViewer>
+                    </Border>
+                </DockPanel>
             </StackPanel>
         </DockPanel>
     </Grid>

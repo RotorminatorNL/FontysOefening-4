@@ -12,5 +12,6 @@ namespace Containerschip
         int MaxWeight { get; }
         int Weight { get; }
         int MaxWeightOnTop { get; }
+        int Priority { get; }
     }
 }
