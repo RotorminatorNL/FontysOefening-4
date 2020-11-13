@@ -13,6 +13,8 @@ namespace Containerschip
         public int Weight { get; }
         public int MaxWeightOnTop { get; } = 120000;
         public int Priority { get; } = 1;
+        public bool IsCoolable { get; } = true;
+        public bool IsValuable { get; } = true;
 
         public ContainerCoolableValuable(int weight)
         {

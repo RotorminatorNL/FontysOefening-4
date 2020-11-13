@@ -28,7 +28,7 @@
                         <Button Name="AddContainerCoolableValuable" Content="Koel- en kostbaar" FontSize="25" Height="50" Click="AddContainerToList_Click"/>
                     </StackPanel>
                 </DockPanel>
-                <ListBox Name="LbxContainers" FontSize="25" Height="322" Margin="0,0,0,10" SelectionChanged="LbxContainers_SelectionChanged"></ListBox>
+                <ListBox Name="LbxContainers" FontSize="22" Height="322" Margin="0,0,0,10" SelectionChanged="LbxContainers_SelectionChanged"></ListBox>
 
                 <Rectangle Fill="Black" Height="5"/>
                 <Label Content="Schip info" FontSize="40"/>
@@ -44,7 +44,10 @@
                     <TextBox Name="TbxShipWidth" BorderBrush="Black" BorderThickness="0,1" FontSize="25" Height="50" Text="0" Padding="0,0,5,0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
                 </DockPanel>
 
-                <Button Name="BtnCalculateLayout" BorderBrush="Black" BorderThickness="0,2" Content="Bereken indeling" FontSize="35" Height="60" Margin="0,10,0,0" Click="BtnCalculateLayout_Click"/>
+                <DockPanel>
+                    <Button Name="BtnReset" BorderBrush="Black" BorderThickness="0,2,2,2" Content="Reset" FontSize="35" Height="60" Margin="0,10,0,0" Click="BtnReset_Click"/>
+                    <Button Name="BtnCalculateLayout" BorderBrush="Black" BorderThickness="0,2" Content="Bereken indeling" FontSize="35" Height="60" Margin="0,10,0,0" Click="BtnCalculateLayout_Click"/>
+                </DockPanel>
             </StackPanel>
             <Rectangle Fill="Black" Width="2"/>
             <StackPanel>
@@ -67,6 +70,62 @@
                             <StackPanel Name="SpShipLayout" HorizontalAlignment="Left" VerticalAlignment="Center"></StackPanel>
                         </ScrollViewer>
                     </Border>
+                </DockPanel>
+                <DockPanel Height="440">
+                    <StackPanel Width="320">
+                        <Label Content="Extra schip info" FontSize="40"/>
+                        <DockPanel>
+                            <Label Content="Lengte: " FontSize="22" Width="200"/>
+                            <Label Name="LblLength" Content="" FontSize="22"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <Label Content="Breedte: " FontSize="22" Width="200"/>
+                            <Label Name="LblWidth" Content="" FontSize="22"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <Label Content="Gewicht links: " FontSize="22" Width="200"/>
+                            <Label Name="LblWeightLeftWing" Content="" FontSize="22"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <Label Content="Gewicht rechts: " FontSize="22" Width="200"/>
+                            <Label Name="LblWeightRightWing" Content="" FontSize="22"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <Label Content="Verschil in gewicht (%): " FontSize="22" Width="260"/>
+                            <Label Name="LblWeightDifference" Content="" FontSize="22"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <Label Content="Totaal gewicht: " FontSize="22" Width="200"/>
+                            <Label Name="LblTotalWeight" Content="" FontSize="22"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <Label Content="Geëist gewicht: " FontSize="22" Width="200"/>
+                            <Label Name="LblRequiredWeight" Content="" FontSize="22"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <Label Content="Maximum gewicht: " FontSize="22" Width="200"/>
+                            <Label Name="LblMaxWeight" Content="" FontSize="22"/>
+                        </DockPanel>
+                    </StackPanel>
+                    <Rectangle Fill="Black" Width="1"/>
+                    <StackPanel Width="400">
+                        <Label Content="Geselecteerde stack" FontSize="40"/>
+                        <DockPanel>
+                            <Label Content="Rijnummer: " FontSize="22" Width="200"/>
+                            <Label Name="LblRowNumber" Content="" FontSize="22"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <Label Content="Stacknummer: " FontSize="22" Width="200"/>
+                            <Label Name="LblStackNumber" Content="" FontSize="22"/>
+                        </DockPanel>
+                        <Label Content="Containers in stack:" FontSize="22"/>
+                        <ListBox Name="LbxSelectedStack" FontSize="22" Height="248"></ListBox>
+                    </StackPanel>
+                    <Rectangle Fill="Black" Width="1"/>
+                    <StackPanel>
+                        <Label Content="Overige containers" FontSize="40"/>
+                        <ListBox Name="LbxUnstorableContainers" FontSize="22" Height="378"></ListBox>
+                    </StackPanel>
                 </DockPanel>
             </StackPanel>
         </DockPanel>

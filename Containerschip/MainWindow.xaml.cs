@@ -57,10 +57,15 @@ namespace Containerschip
 
         private void BtnCalculateLayout_Click(object sender, RoutedEventArgs e)
         {
-            if (_containers.Count != 0)
+            int shipLength = GetShipAttribute(TbxShipLength);
+            int shipWidth = GetShipAttribute(TbxShipWidth);
+
+            if (_containers.Count != 0 && shipLength != 0 && shipWidth != 0)
             {
-                InitializeShip();
+                InitializeShip(shipLength, shipWidth);
                 ShowShipLayout(GetShipLayout());
+                ShowExtraShipInfo();
+                ShowUnstorableContainers();
             }
             else
             {
@@ -84,19 +89,23 @@ namespace Containerschip
 
         private void BtnStack(object sender, RoutedEventArgs e)
         {
+            foreach (Button btn in GetButtons<Button>(SpShipLayout))
+            {
+                btn.FontWeight = FontWeights.Normal;
+            }
+
             Button selectedStack = (Button)sender;
-            MessageBox.Show($"U selecteer: {selectedStack.Content}");
+            selectedStack.FontWeight = FontWeights.Bold;
+            string[] splitSelectedStackContent = selectedStack.Content.ToString().Split(' ')[1].Split('.');
+
+            LblRowNumber.Content = splitSelectedStackContent[0];
+            LblStackNumber.Content = splitSelectedStackContent[1];
+            LbxSelectedStack.ItemsSource = _ship.GetStack(selectedStack.Tag.ToString());
         }
 
-        private void InitializeShip()
+        private void InitializeShip(int shipLength, int shipWidth)
         {
-            int shipLength = GetShipAttribute(TbxShipLength);
-            int shipWidth = GetShipAttribute(TbxShipWidth);
-
-            if (shipLength != 0 && shipWidth != 0)
-            {
-                _ship = new Ship(_containers, shipLength, shipWidth);
-            }
+             _ship = new Ship(_containers, shipLength, shipWidth);
         }
 
         private List<DockPanel> GetShipLayout()
@@ -132,6 +141,7 @@ namespace Containerschip
                 {
                     Content = $"Stack {splitRowName[1]}.{i+1}",
                     FontSize = 20,
+                    Tag = $"{Convert.ToInt32(splitRowName[1])-1}_{i}",
                     Width = 160
                 };
                 button.Click += BtnStack;
@@ -147,6 +157,24 @@ namespace Containerschip
             {
                 SpShipLayout.Children.Add(row);
             }
+        }
+
+        private void ShowExtraShipInfo()
+        {
+            LblLength.Content = _ship.Length;
+            LblWidth.Content = _ship.Width;
+            LblWeightLeftWing.Content = _ship.WeightLeftWing;
+            LblWeightRightWing.Content = _ship.WeightRightWing;
+            LblWeightDifference.Content = _ship.WeightDifferenceOfWings;
+            LblTotalWeight.Content = _ship.TotalWeight;
+            LblRequiredWeight.Content = _ship.RequiredWeight;
+            LblMaxWeight.Content = _ship.MaxWeight;
+        }
+
+        private void ShowUnstorableContainers()
+        {
+            LbxUnstorableContainers.ItemsSource = null;
+            LbxUnstorableContainers.ItemsSource = _ship.GetUnstorableContainers();
         }
 
         private void UpdateListContent()
@@ -264,6 +292,33 @@ namespace Containerschip
             tbx.BorderBrush = Brushes.Red;
             tbx.Foreground = Brushes.Red;
             MessageBox.Show(msg, "Oeps!", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+
+        private void BtnReset_Click(object sender, RoutedEventArgs e)
+        {
+            _containers.Clear();
+            SpShipLayout.Children.Clear();
+
+            LblRowNumber.Content = "";
+            LblStackNumber.Content = "";
+
+            _ship = null;
+            LbxContainers.ItemsSource = null;
+            LbxSelectedStack.ItemsSource = null;
+            LbxUnstorableContainers.ItemsSource = null;
+
+            foreach (Button btn in GetButtons<Button>(DpButtons))
+            {
+                try
+                {
+                    string[] splitContent = btn.Content.ToString().Split('(');
+                    btn.Content = $"{splitContent[0].Trim(' ')}";
+                }
+                catch (Exception)
+                {
+                    btn.Content = $"{btn.Content}";
+                }
+            }
         }
     }
 }

@@ -13,5 +13,7 @@ namespace Containerschip
         int Weight { get; }
         int MaxWeightOnTop { get; }
         int Priority { get; }
+        bool IsValuable { get; }
+        bool IsCoolable { get; }
     }
 }
