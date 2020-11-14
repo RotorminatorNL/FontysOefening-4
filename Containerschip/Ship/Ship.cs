@@ -20,6 +20,7 @@ namespace Containerschip
         public readonly int TotalWeight;
         public readonly int MaxWeight;
         public readonly int RequiredWeight;
+        public readonly bool IsAbleToGo;
 
         private List<IContainer> _containers;
         private List<IContainer> _unstorableContainers = new List<IContainer>();
@@ -42,6 +43,7 @@ namespace Containerschip
             WeightRightWing = GetWeightOfWing(GetRightWingRows(), _shipRows.Count);
             TotalWeight = WeightLeftWing + WeightRightWing;
             WeightDifferenceOfWings = GetWeightDifferenceOfWings();
+            IsAbleToGo = CheckIfAbleToGo();
         }
 
         private void CreateShipRows()
@@ -104,7 +106,9 @@ namespace Containerschip
             foreach (IContainer container in _containers)
             {
                 if (!GetShipRow().AddContainerToStack(container))
+                {
                     _unstorableContainers.Add(container);
+                }
             }
         }
 
@@ -157,10 +161,23 @@ namespace Containerschip
             {
                 return Math.Round(100 / (double)TotalWeight * (WeightLeftWing - WeightRightWing), 1);
             }
+            else if (Width == 1)
+            {
+                return 0;
+            }
             else
             {
                 return Math.Round(100 / (double)TotalWeight * (WeightRightWing - WeightLeftWing), 1);
             }
+        }
+
+        private bool CheckIfAbleToGo()
+        {
+            if (WeightDifferenceOfWings < 20 && TotalWeight >= RequiredWeight || Width == 1 && TotalWeight >= RequiredWeight)
+            {
+                return true;
+            }
+            return false;
         }
 
         public IReadOnlyCollection<IContainer> GetStack(string stackPos)

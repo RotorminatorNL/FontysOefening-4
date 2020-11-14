@@ -50,6 +50,15 @@ namespace Containerschip
 
         private bool IsStackAvialable(int stackNumber, int containerAmount)
         {
+            if (CheckStacksBehind(stackNumber, containerAmount) && CheckStacksInFront(stackNumber, containerAmount))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool CheckStacksBehind(int stackNumber, int containerAmount)
+        {
             try
             {
                 int amountContainersPreviousStack = _containerStacks[stackNumber - 1].GetContainers().Count;
@@ -64,6 +73,33 @@ namespace Containerschip
                     return true;
                 }
                 else if (!_containerStacks[stackNumber - 1].IsTopContainerValuable())
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                return true;
+            }
+        }
+
+        private bool CheckStacksInFront(int stackNumber, int containerAmount)
+        {
+            try
+            {
+                int amountContainersNextStack = _containerStacks[stackNumber + 1].GetContainers().Count;
+                int amountContainersSecondNextStack = _containerStacks[stackNumber + 2].GetContainers().Count;
+
+                if (amountContainersNextStack == 0 || amountContainersNextStack > containerAmount)
+                {
+                    return true;
+                }
+                else if (amountContainersSecondNextStack == 0 || amountContainersSecondNextStack < amountContainersNextStack)
+                {
+                    return true;
+                }
+                else if (!_containerStacks[stackNumber + 1].IsTopContainerValuable())
                 {
                     return true;
                 }

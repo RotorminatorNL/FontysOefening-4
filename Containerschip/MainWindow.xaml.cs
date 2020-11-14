@@ -14,7 +14,7 @@ namespace Containerschip
     public partial class MainWindow : Window
     {
         private Ship _ship;
-        private List<IContainer> _containers = new List<IContainer>();
+        private readonly List<IContainer> _containers = new List<IContainer>();
 
         public MainWindow()
         {
@@ -23,7 +23,7 @@ namespace Containerschip
 
         private void AddContainerToList_Click(object sender, RoutedEventArgs e)
         {
-            int containerWeight = GetContainerWeight(TbxContainerWeight);
+            int containerWeight = GetIntFromInput(TbxContainerWeight, 4000, 30000);
             Button btnPressed = (Button)sender;
             if (containerWeight != 0 && btnPressed.Name.Substring(3) is string containerName)
             {
@@ -57,8 +57,8 @@ namespace Containerschip
 
         private void BtnCalculateLayout_Click(object sender, RoutedEventArgs e)
         {
-            int shipLength = GetShipAttribute(TbxShipLength);
-            int shipWidth = GetShipAttribute(TbxShipWidth);
+            int shipLength = GetIntFromInput(TbxShipLength);
+            int shipWidth = GetIntFromInput(TbxShipWidth);
 
             if (_containers.Count != 0 && shipLength != 0 && shipWidth != 0)
             {
@@ -169,6 +169,7 @@ namespace Containerschip
             LblTotalWeight.Content = _ship.TotalWeight;
             LblRequiredWeight.Content = _ship.RequiredWeight;
             LblMaxWeight.Content = _ship.MaxWeight;
+            LblAbleToGo.Content = _ship.IsAbleToGo == true ? "Ja" : "Nee";
         }
 
         private void ShowUnstorableContainers()
@@ -222,18 +223,18 @@ namespace Containerschip
             }
         }
 
-        private int GetContainerWeight(TextBox tbx)
+        private int GetIntFromInput(TextBox tbx)
         {
-            if (IsInputValid(tbx, 4000, 30000))
+            if (IsInputValid(tbx))
             {
                 return Convert.ToInt32(tbx.Text);
             }
             return 0;
         }
 
-        private int GetShipAttribute(TextBox tbx)
+        private int GetIntFromInput(TextBox tbx, int minAmount, int maxAmount)
         {
-            if (IsInputValid(tbx))
+            if (IsInputValid(tbx, minAmount, maxAmount))
             {
                 return Convert.ToInt32(tbx.Text);
             }
@@ -296,16 +297,19 @@ namespace Containerschip
 
         private void BtnReset_Click(object sender, RoutedEventArgs e)
         {
-            _containers.Clear();
-            SpShipLayout.Children.Clear();
-
-            LblRowNumber.Content = "";
-            LblStackNumber.Content = "";
+            ResetAddContainers();
+            ResetExtraShipInfo();
+            ResetSelectedStack();
 
             _ship = null;
-            LbxContainers.ItemsSource = null;
-            LbxSelectedStack.ItemsSource = null;
+            SpShipLayout.Children.Clear();
             LbxUnstorableContainers.ItemsSource = null;
+        }
+
+        private void ResetAddContainers()
+        {
+            _containers.Clear();
+            LbxContainers.ItemsSource = null;
 
             foreach (Button btn in GetButtons<Button>(DpButtons))
             {
@@ -319,6 +323,26 @@ namespace Containerschip
                     btn.Content = $"{btn.Content}";
                 }
             }
+        }
+
+        private void ResetExtraShipInfo()
+        {
+            LblLength.Content = "";
+            LblWidth.Content = "";
+            LblWeightLeftWing.Content = "";
+            LblWeightRightWing.Content = "";
+            LblWeightDifference.Content = "";
+            LblTotalWeight.Content = "";
+            LblRequiredWeight.Content = "";
+            LblMaxWeight.Content = "";
+            LblAbleToGo.Content = "";
+        }
+
+        private void ResetSelectedStack()
+        {
+            LblRowNumber.Content = "";
+            LblStackNumber.Content = "";
+            LbxSelectedStack.ItemsSource = null;
         }
     }
 }

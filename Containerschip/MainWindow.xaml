@@ -15,7 +15,7 @@
                 <DockPanel>
                     <Label Content="Gewicht (in kilo): " BorderBrush="Black" BorderThickness="0,1" FontSize="25" Height="50" Width="350" VerticalContentAlignment="Center"/>
                     <Rectangle Fill="Black" Width="1"/>
-                    <TextBox Name="TbxContainerWeight"   BorderBrush="Black" BorderThickness="0,1"   FontSize="25" Height="50" Text="4000" Padding="0,0,5,0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                    <TextBox Name="TbxContainerWeight"   BorderBrush="Black" BorderThickness="0,1"   FontSize="25" Height="50" Text="30000" Padding="0,0,5,0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
                 </DockPanel>
                 <Label Content="* minimum: 4.000 - maximum: 30.000 *" FontSize="20" HorizontalContentAlignment="Center"/>
                 <DockPanel Name="DpButtons" Margin="0,0,0,10">
@@ -105,6 +105,10 @@
                         <DockPanel>
                             <Label Content="Maximum gewicht: " FontSize="22" Width="200"/>
                             <Label Name="LblMaxWeight" Content="" FontSize="22"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <Label Content="Schip klaar voor vertrek: " FontSize="22" Width="260"/>
+                            <Label Name="LblAbleToGo" Content="" FontSize="22"/>
                         </DockPanel>
                     </StackPanel>
                     <Rectangle Fill="Black" Width="1"/>

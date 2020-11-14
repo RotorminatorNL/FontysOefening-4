@@ -16,6 +16,13 @@ namespace Containerschip
             if (IsAble(container))
             {
                 _weight += container.Weight;
+
+                if (container.IsValuable)
+                {
+                    _containers.Insert(0,container);
+                    return true;
+                }
+
                 _containers.Add(container);
                 return true;
             }
