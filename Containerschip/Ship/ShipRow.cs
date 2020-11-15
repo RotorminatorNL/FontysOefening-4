@@ -38,7 +38,7 @@ namespace Containerschip
             {
                 foreach (ContainerStack stack in _containerStacks)
                 {
-                    if (IsStackAvialable(_containerStacks.IndexOf(stack), stack.GetContainers().Count + 1) && stack.AddContainerToList(container))
+                    if (IsStackAvialable(_containerStacks.IndexOf(stack), stack.GetContainers().Count + 1, container) && stack.AddContainerToList(container))
                     {
                         Weight += container.Weight;
                         return true;
@@ -48,67 +48,100 @@ namespace Containerschip
             return false;
         }
 
-        private bool IsStackAvialable(int stackNumber, int containerAmount)
+        private bool IsStackAvialable(int stackNumber, int containerAmount, IContainer container)
         {
-            if (CheckStacksBehind(stackNumber, containerAmount) && CheckStacksInFront(stackNumber, containerAmount))
+            if (CheckStackSurroundings(stackNumber, containerAmount, container))
             {
                 return true;
             }
             return false;
         }
 
-        private bool CheckStacksBehind(int stackNumber, int containerAmount)
+        private bool CheckStackSurroundings(int stackNumber, int containerAmount, IContainer container)
+        {
+            ContainerStack currentStack = GetSurroundingStack(stackNumber, 0);
+
+            ContainerStack previousStack = GetSurroundingStack(stackNumber, -1);
+            ContainerStack secondPreviousStack = GetSurroundingStack(stackNumber, -2);
+
+            ContainerStack nextStack = GetSurroundingStack(stackNumber, 1);
+            ContainerStack secondNextStack = GetSurroundingStack(stackNumber, 2);
+
+            if (previousStack == null || secondPreviousStack == null)
+            {
+                return true;
+            }
+            else if (previousStack.GetContainers().Count == 0 || secondPreviousStack.GetContainers().Count == 0)
+            {
+                return true;
+            }
+            else if (!container.IsValuable)
+            {
+                return CanNormalContainerBePlaced(containerAmount, previousStack, currentStack, nextStack, secondNextStack);
+            }
+            else if (container.IsValuable)
+            {
+                return CanValuableContainerBePlaced(containerAmount, previousStack, nextStack);
+            }
+            
+            return false;
+        }
+
+        private ContainerStack GetSurroundingStack(int stackNumber, int amount)
         {
             try
             {
-                int amountContainersPreviousStack = _containerStacks[stackNumber - 1].GetContainers().Count;
-                int amountContainersBeforeLastStack = _containerStacks[stackNumber - 2].GetContainers().Count;
-
-                if (amountContainersPreviousStack == 0 || amountContainersPreviousStack > containerAmount)
-                {
-                    return true;
-                }
-                else if (amountContainersBeforeLastStack == 0 || amountContainersBeforeLastStack < amountContainersPreviousStack)
-                {
-                    return true;
-                }
-                else if (!_containerStacks[stackNumber - 1].IsTopContainerValuable())
-                {
-                    return true;
-                }
-                return false;
+                return _containerStacks[stackNumber + amount];
             }
             catch (Exception)
             {
-                return true;
+                return null;
             }
         }
 
-        private bool CheckStacksInFront(int stackNumber, int containerAmount)
+        private bool CanNormalContainerBePlaced(int containerAmount, ContainerStack previousStack, ContainerStack currentStack, ContainerStack nextStack, ContainerStack secondNextStack)
         {
-            try
+            if (containerAmount < previousStack.GetContainers().Count)
             {
-                int amountContainersNextStack = _containerStacks[stackNumber + 1].GetContainers().Count;
-                int amountContainersSecondNextStack = _containerStacks[stackNumber + 2].GetContainers().Count;
+                if (nextStack != null && secondNextStack != null)
+                {
+                    if (nextStack.IsTopContainerValuable() && nextStack.GetContainers().Count > secondNextStack.GetContainers().Count)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (currentStack.IsTopContainerValuable())
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
-                if (amountContainersNextStack == 0 || amountContainersNextStack > containerAmount)
-                {
-                    return true;
-                }
-                else if (amountContainersSecondNextStack == 0 || amountContainersSecondNextStack < amountContainersNextStack)
-                {
-                    return true;
-                }
-                else if (!_containerStacks[stackNumber + 1].IsTopContainerValuable())
-                {
-                    return true;
-                }
-                return false;
-            }
-            catch (Exception)
+        private bool CanValuableContainerBePlaced(int containerAmount, ContainerStack previousStack, ContainerStack nextStack)
+        {
+            if (containerAmount < previousStack.GetContainers().Count)
             {
-                return true;
+                if (nextStack != null)
+                {
+                    if (containerAmount > nextStack.GetContainers().Count)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    return true;
+                }
             }
+            return false;
         }
 
         public IReadOnlyCollection<IContainer> GetStack(int stackNumber)

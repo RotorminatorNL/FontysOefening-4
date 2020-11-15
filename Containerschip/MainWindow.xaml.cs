@@ -57,6 +57,7 @@ namespace Containerschip
 
         private void BtnCalculateLayout_Click(object sender, RoutedEventArgs e)
         {
+            Mouse.OverrideCursor = Cursors.Wait;
             int shipLength = GetIntFromInput(TbxShipLength);
             int shipWidth = GetIntFromInput(TbxShipWidth);
 
@@ -71,6 +72,7 @@ namespace Containerschip
             {
                 ShowError("Voeg ten minste 1 container toe");
             }
+            Mouse.OverrideCursor = null;
         }
 
         private void LbxContainers_SelectionChanged(object sender, SelectionChangedEventArgs e)

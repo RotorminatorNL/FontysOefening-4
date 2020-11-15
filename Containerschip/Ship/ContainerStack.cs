@@ -56,7 +56,7 @@ namespace Containerschip
 
         private bool IsTooHeavy(IContainer container)
         {
-            if (_weight < container.MaxWeightOnTop)
+            if (_weight <= container.MaxWeightOnTop)
             {
                 return false;
             }
@@ -65,7 +65,14 @@ namespace Containerschip
 
         public bool IsTopContainerValuable()
         {
-            return _containers[0].IsValuable;
+            try
+            {
+                return _containers[0].IsValuable;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public IReadOnlyCollection<IContainer> GetContainers()

@@ -23,7 +23,7 @@ namespace Containerschip
         public readonly bool IsAbleToGo;
 
         private List<IContainer> _containers;
-        private List<IContainer> _unstorableContainers = new List<IContainer>();
+        private List<IContainer> _unplacableContainers = new List<IContainer>();
         private List<ShipRow> _shipRows = new List<ShipRow>();
 
         public Ship(List<IContainer> containers, int length, int width)
@@ -38,12 +38,26 @@ namespace Containerschip
             CreateShipRows();
             SortContainerList();
             DistributeContainers();
+            TryUnplacableContainers();
 
-            WeightLeftWing = GetWeightOfWing(0, GetLeftWingRows());
-            WeightRightWing = GetWeightOfWing(GetRightWingRows(), _shipRows.Count);
+
+            WeightLeftWing = GetWeightOfWing(0, _shipRows.Count / 2);
+            WeightRightWing = GetWeightOfWing(_shipRows.Count / 2, _shipRows.Count);
+
+            if (IsAmountShipRowsOdd())
+            {
+                WeightLeftWing = GetWeightOfWing(0, _shipRows.Count / 2);
+                WeightRightWing = GetWeightOfWing((_shipRows.Count / 2) + 1, _shipRows.Count);
+            }
+
             TotalWeight = WeightLeftWing + WeightRightWing;
             WeightDifferenceOfWings = GetWeightDifferenceOfWings();
             IsAbleToGo = CheckIfAbleToGo();
+        }
+
+        private bool IsAmountShipRowsOdd()
+        {
+            return _shipRows.Count % 2 != 0;
         }
 
         private void CreateShipRows()
@@ -105,34 +119,50 @@ namespace Containerschip
         {
             foreach (IContainer container in _containers)
             {
-                if (!GetShipRow().AddContainerToStack(container))
+                if (!GetRowWithLeastWeight().AddContainerToStack(container))
                 {
-                    _unstorableContainers.Add(container);
+                    _unplacableContainers.Add(container);
                 }
             }
         }
 
-        private ShipRow GetShipRow()
+        private void TryUnplacableContainers()
         {
-            if (GetWeightOfWing(0, GetLeftWingRows()) <= GetWeightOfWing(GetRightWingRows(), _shipRows.Count))
+            List<IContainer> storedUnstorables = new List<IContainer>();
+            foreach (IContainer container in _unplacableContainers)
             {
-                return GetAvialableRow(0, GetLeftWingRows());
+                if (GetRowWithLeastWeight().AddContainerToStack(container))
+                {
+                    storedUnstorables.Add(container);
+                }
             }
-            return GetAvialableRow(GetRightWingRows(), _shipRows.Count);
+
+            RemoveStoredUnstorables(storedUnstorables);
         }
 
-        private ShipRow GetAvialableRow(int beginWing, int endWing)
+        private void RemoveStoredUnstorables(List<IContainer> storedUnstorables)
+        {
+            foreach (IContainer container in storedUnstorables)
+            {
+                _unplacableContainers.Remove(container);
+            }
+        }
+
+        private ShipRow GetRowWithLeastWeight()
         {
             ShipRow output = null;
-            if (beginWing != endWing)
+            foreach (ShipRow shipRow in _shipRows)
             {
-                for (int i = beginWing; i < endWing; i++)
+                if (output == null)
                 {
-                    output = _shipRows[i];
+                    output = shipRow;
                 }
-                return output;
+                else if (output.Weight > shipRow.Weight)
+                {
+                    output = shipRow;
+                }
             }
-            return _shipRows[beginWing];
+            return output;
         }
 
         private int GetWeightOfWing(int beginWing, int endWing)
@@ -143,16 +173,6 @@ namespace Containerschip
                 output += _shipRows[i].Weight;
             }
             return output;
-        }
-
-        private int GetLeftWingRows()
-        {
-            return (int)Math.Floor((decimal)(_shipRows.Count / 2));
-        }
-
-        private int GetRightWingRows()
-        {
-            return (int)Math.Round((decimal)(_shipRows.Count / 2));
         }
 
         private double GetWeightDifferenceOfWings()
@@ -191,7 +211,7 @@ namespace Containerschip
 
         public IReadOnlyCollection<IContainer> GetUnstorableContainers()
         {
-            return _unstorableContainers.AsReadOnly();
+            return _unplacableContainers.AsReadOnly();
         }
 
         public override string ToString()
