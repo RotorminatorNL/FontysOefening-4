@@ -8,14 +8,10 @@ namespace Containerschip
 {
     public class Ship
     {
-        /* For example:
-         * - Calculate maxWeight (900): length (3) x width (2) x maxStackWeight (150)
-         * - requiredWeight      (450): maxWeight (900) / 2 
-         */
         public readonly int Length;
         public readonly int Width;
-        public readonly int WeightLeftWing;
-        public readonly int WeightRightWing;
+        public int WeightLeftWing { get; private set; }
+        public int WeightRightWing { get; private set; }
         public readonly double WeightDifferenceOfWings;
         public readonly int TotalWeight;
         public readonly int MaxWeight;
@@ -40,15 +36,7 @@ namespace Containerschip
             DistributeContainers();
             TryUnplacableContainers();
 
-
-            WeightLeftWing = GetWeightOfWing(0, _shipRows.Count / 2);
-            WeightRightWing = GetWeightOfWing(_shipRows.Count / 2, _shipRows.Count);
-
-            if (IsAmountShipRowsOdd())
-            {
-                WeightLeftWing = GetWeightOfWing(0, _shipRows.Count / 2);
-                WeightRightWing = GetWeightOfWing((_shipRows.Count / 2) + 1, _shipRows.Count);
-            }
+            WeightDistribution();
 
             TotalWeight = WeightLeftWing + WeightRightWing;
             WeightDifferenceOfWings = GetWeightDifferenceOfWings();
@@ -58,6 +46,20 @@ namespace Containerschip
         private bool IsAmountShipRowsOdd()
         {
             return _shipRows.Count % 2 != 0;
+        }
+
+        private void WeightDistribution()
+        {
+            if (IsAmountShipRowsOdd())
+            {
+                WeightLeftWing = GetWeightOfWing(0, _shipRows.Count / 2);
+                WeightRightWing = GetWeightOfWing((_shipRows.Count / 2) + 1, _shipRows.Count);
+            }
+            else
+            {
+                WeightLeftWing = GetWeightOfWing(0, _shipRows.Count / 2);
+                WeightRightWing = GetWeightOfWing(_shipRows.Count / 2, _shipRows.Count);
+            }
         }
 
         private void CreateShipRows()
@@ -102,15 +104,25 @@ namespace Containerschip
             IContainer output = null;
             foreach (IContainer container in _containers)
             {
-                if(container.GetType().Name == containerType)
-                if (output == null)
-                {
-                    output = container;
-                }
-                else if (output.Weight < container.Weight)
-                {
-                    output = container;
-                }
+                output = VerifyContainer(output, container, containerType);
+            }
+            return output;
+        }
+
+        private IContainer VerifyContainer(IContainer output, IContainer container, string containerType)
+        {
+            if (container.GetType().Name != containerType)
+            {
+                return output;
+            }
+
+            if (output == null)
+            {
+                output = container;
+            }
+            else if (output.Weight < container.Weight)
+            {
+                output = container;
             }
             return output;
         }
@@ -128,23 +140,13 @@ namespace Containerschip
 
         private void TryUnplacableContainers()
         {
-            List<IContainer> storedUnstorables = new List<IContainer>();
-            foreach (IContainer container in _unplacableContainers)
+            for (int i = 0; i < _unplacableContainers.Count; i++)
             {
-                if (GetRowWithLeastWeight().AddContainerToStack(container))
+                if (GetRowWithLeastWeight().AddContainerToStack(_unplacableContainers[i]))
                 {
-                    storedUnstorables.Add(container);
+                    _unplacableContainers.Remove(_unplacableContainers[i]);
+                    i--;
                 }
-            }
-
-            RemoveStoredUnstorables(storedUnstorables);
-        }
-
-        private void RemoveStoredUnstorables(List<IContainer> storedUnstorables)
-        {
-            foreach (IContainer container in storedUnstorables)
-            {
-                _unplacableContainers.Remove(container);
             }
         }
 

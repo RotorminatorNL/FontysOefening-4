@@ -18,18 +18,7 @@ namespace Containerschip
 
         public ContainerNormal(int weight)
         {
-            if (weight < 4000)
-            {
-                Weight = 4000;
-            }
-            else if (weight > 30000)
-            {
-                Weight = 30000;
-            }
-            else
-            {
-                Weight = weight;
-            }
+            Weight = weight;
         }
 
         public override string ToString()

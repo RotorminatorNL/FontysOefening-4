@@ -13,20 +13,23 @@ namespace Containerschip
 
         public bool AddContainerToList(IContainer container)
         {
-            if (IsAble(container))
+            if (!IsAble(container))
             {
-                _weight += container.Weight;
+                return false;
+            }
 
-                if (container.IsValuable)
-                {
-                    _containers.Insert(0,container);
-                    return true;
-                }
+            _weight += container.Weight;
 
+            if (container.IsValuable)
+            {
+                _containers.Insert(0, container);
+                return true;
+            }
+            else
+            {
                 _containers.Add(container);
                 return true;
             }
-            return false;
         }
 
         private bool IsAble(IContainer container)

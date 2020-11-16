@@ -28,21 +28,32 @@ namespace Containerschip
         {
             if (container.IsCoolable)
             {
-                if (_containerStacks[0].AddContainerToList(container))
-                {
-                    Weight += container.Weight;
-                    return true;
-                }
+                return AddCoolableContainer(container);
             }
             else
             {
-                foreach (ContainerStack stack in _containerStacks)
+                return AddOtherContainer(container);
+            }
+        }
+
+        private bool AddCoolableContainer(IContainer container)
+        {
+            if (_containerStacks[0].AddContainerToList(container))
+            {
+                Weight += container.Weight;
+                return true;
+            }
+            return false;
+        }
+
+        private bool AddOtherContainer(IContainer container)
+        {
+            foreach (ContainerStack stack in _containerStacks)
+            {
+                if (IsStackAvialable(_containerStacks.IndexOf(stack), stack.GetContainers().Count + 1, container) && stack.AddContainerToList(container))
                 {
-                    if (IsStackAvialable(_containerStacks.IndexOf(stack), stack.GetContainers().Count + 1, container) && stack.AddContainerToList(container))
-                    {
-                        Weight += container.Weight;
-                        return true;
-                    }
+                    Weight += container.Weight;
+                    return true;
                 }
             }
             return false;
@@ -103,24 +114,28 @@ namespace Containerschip
         {
             if (containerAmount < previousStack.GetContainers().Count)
             {
-                if (nextStack != null && secondNextStack != null)
-                {
-                    if (nextStack.IsTopContainerValuable() && nextStack.GetContainers().Count > secondNextStack.GetContainers().Count)
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    return true;
-                }
+                return CheckNextStacks(nextStack, secondNextStack);
+            }
+            else if (currentStack.IsTopContainerValuable())
+            {
+                return true;
             }
             else
             {
-                if (currentStack.IsTopContainerValuable())
-                {
-                    return true;
-                }
+                return false;
+            }
+        }
+
+        private bool CheckNextStacks(ContainerStack nextStack, ContainerStack secondNextStack)
+        {
+            if (nextStack == null || secondNextStack == null)
+            {
+                return true;
+            }
+
+            if (nextStack.IsTopContainerValuable() && nextStack.GetContainers().Count > secondNextStack.GetContainers().Count)
+            {
+                return true;
             }
             return false;
         }
@@ -129,17 +144,24 @@ namespace Containerschip
         {
             if (containerAmount < previousStack.GetContainers().Count)
             {
-                if (nextStack != null)
-                {
-                    if (containerAmount > nextStack.GetContainers().Count)
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    return true;
-                }
+                return CheckNextStack(nextStack, containerAmount);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool CheckNextStack(ContainerStack nextStack, int containerAmount)
+        {
+            if (nextStack == null)
+            {
+                return true;
+            }
+
+            if (containerAmount > nextStack.GetContainers().Count)
+            {
+                return true;
             }
             return false;
         }
