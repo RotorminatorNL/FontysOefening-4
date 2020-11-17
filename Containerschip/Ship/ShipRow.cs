@@ -24,18 +24,6 @@ namespace Containerschip
             }
         }
 
-        public bool AddContainerToStack(IContainer container)
-        {
-            if (container.IsCoolable)
-            {
-                return AddCoolableContainer(container);
-            }
-            else
-            {
-                return AddOtherContainer(container);
-            }
-        }
-
         private bool AddCoolableContainer(IContainer container)
         {
             if (_containerStacks[0].AddContainerToList(container))
@@ -164,6 +152,18 @@ namespace Containerschip
                 return true;
             }
             return false;
+        }
+
+        public bool AddContainerToStacks(IContainer container)
+        {
+            if (container.IsCoolable)
+            {
+                return AddCoolableContainer(container);
+            }
+            else
+            {
+                return AddOtherContainer(container);
+            }
         }
 
         public IReadOnlyCollection<IContainer> GetStack(int stackNumber)

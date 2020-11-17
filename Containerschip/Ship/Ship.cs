@@ -131,7 +131,7 @@ namespace Containerschip
         {
             foreach (IContainer container in _containers)
             {
-                if (!GetRowWithLeastWeight().AddContainerToStack(container))
+                if (!GetRowWithLeastWeight().AddContainerToStacks(container))
                 {
                     _unplacableContainers.Add(container);
                 }
@@ -142,7 +142,7 @@ namespace Containerschip
         {
             for (int i = 0; i < _unplacableContainers.Count; i++)
             {
-                if (GetRowWithLeastWeight().AddContainerToStack(_unplacableContainers[i]))
+                if (GetRowWithLeastWeight().AddContainerToStacks(_unplacableContainers[i]))
                 {
                     _unplacableContainers.Remove(_unplacableContainers[i]);
                     i--;
