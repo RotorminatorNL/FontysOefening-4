@@ -5,57 +5,88 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Containerschip"
         mc:Ignorable="d"
+        WindowState="Maximized"
         WindowStartupLocation="CenterScreen"
-        Title="MainWindow" Height="900" Width="1600">
+        Title="Container schip indeling" Height="900" Width="1600" FontFamily="Segoe UI Light">
     <Grid>
-        <DockPanel>
-            <StackPanel Width="500">
-                <Label Content="Voeg containers toe" FontSize="40"/>
-                <Rectangle Fill="Black" Height="5" Margin="0,0,0,10"/>
-                <DockPanel>
-                    <Label Content="Gewicht (in kilo): " BorderBrush="Black" BorderThickness="0,1" FontSize="25" Height="50" Width="350" VerticalContentAlignment="Center"/>
-                    <Rectangle Fill="Black" Width="1"/>
-                    <TextBox Name="TbxContainerWeight"   BorderBrush="Black" BorderThickness="0,1"   FontSize="25" Height="50" Text="30000" Padding="0,0,5,0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-                </DockPanel>
-                <Label Content="* minimum: 4.000 - maximum: 30.000 *" FontSize="20" HorizontalContentAlignment="Center"/>
-                <DockPanel Name="DpButtons" Margin="0,0,0,10">
-                    <StackPanel Width="250">
-                        <Button Name="AddContainerNormal"           Content="Normaal"           FontSize="25" Height="50" Click="AddContainerToList_Click"/>
-                        <Button Name="AddContainerCoolable"         Content="Koelbaar"          FontSize="25" Height="50" Click="AddContainerToList_Click"/>
-                    </StackPanel>
-                    <StackPanel>
-                        <Button Name="AddContainerValuable"         Content="Kostbaar"          FontSize="25" Height="50" Click="AddContainerToList_Click"/>
-                        <Button Name="AddContainerCoolableValuable" Content="Koel- en kostbaar" FontSize="25" Height="50" Click="AddContainerToList_Click"/>
-                    </StackPanel>
-                </DockPanel>
-                <ListBox Name="LbxContainers" FontSize="22" Height="322" Margin="0,0,0,10" SelectionChanged="LbxContainers_SelectionChanged"></ListBox>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.3*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+        </Grid.RowDefinitions>
 
-                <Rectangle Fill="Black" Height="5"/>
-                <Label Content="Schip info" FontSize="40"/>
-                <Rectangle Fill="Black" Height="5" Margin="0,0,0,10"/>
-                <DockPanel>
-                    <Label Content="Lengte (in containers): " BorderBrush="Black" BorderThickness="0,1" FontSize="25" Height="50" Width="350" VerticalContentAlignment="Center"/>
-                    <Rectangle Fill="Black" Width="1"/>
-                    <TextBox Name="TbxShipLength" BorderBrush="Black" BorderThickness="0,1" FontSize="25" Height="50" Text="0" Padding="0,0,5,0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-                </DockPanel>
-                <DockPanel>
-                    <Label Content="Breedte (in containers): " BorderBrush="Black" BorderThickness="0,1" FontSize="25" Height="50" Width="350" VerticalContentAlignment="Center"/>
-                    <Rectangle Fill="Black" Width="1"/>
-                    <TextBox Name="TbxShipWidth" BorderBrush="Black" BorderThickness="0,1" FontSize="25" Height="50" Text="0" Padding="0,0,5,0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-                </DockPanel>
+        <StackPanel>
+            <Label Content="Voeg containers toe" FontSize="40"/>
+            
+            <DockPanel>
+                <Label Content="Gewicht (in kilo): " BorderBrush="Black" BorderThickness="0,1" FontSize="25" Height="50" Width="250" VerticalContentAlignment="Center"/>
+                <Rectangle Fill="Black" Width="1"/>
+                <TextBox Name="TbxContainerWeight"   BorderBrush="Black" BorderThickness="0,1" FontSize="25" Height="50" Text="30000" Padding="0,0,5,0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+            </DockPanel>
+            <Label Content="* minimum: 4.000 - maximum: 30.000 *" FontSize="20" HorizontalContentAlignment="Center"/>
+            <Grid Name="grdButtons">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-                <DockPanel>
-                    <Button Name="BtnReset" BorderBrush="Black" BorderThickness="0,2,2,2" Content="Reset" FontSize="35" Height="60" Margin="0,10,0,0" Click="BtnReset_Click"/>
-                    <Button Name="BtnCalculateLayout" BorderBrush="Black" BorderThickness="0,2" Content="Bereken indeling" FontSize="35" Height="60" Margin="0,10,0,0" Click="BtnCalculateLayout_Click"/>
-                </DockPanel>
-            </StackPanel>
-            <Rectangle Fill="Black" Width="2"/>
+                <Button Name="AddContainerNormal"           Content="Normaal"           FontSize="22" Height="50" Click="AddContainerToList_Click"/>
+                <Button Name="AddContainerCoolable"         Content="Koelbaar"          FontSize="22" Height="50" Click="AddContainerToList_Click" Grid.Row="1"/>
+                <Button Name="AddContainerValuable"         Content="Kostbaar"          FontSize="22" Height="50" Click="AddContainerToList_Click" Grid.Column="1"/>
+                <Button Name="AddContainerCoolableValuable" Content="Koel- en kostbaar" FontSize="22" Height="50" Click="AddContainerToList_Click" Grid.Column="1" Grid.Row="1"/>
+            </Grid>
+            <ListBox Name="LbxContainers" FontSize="22" Height="322" Margin="0,0,0,10" SelectionChanged="LbxContainers_SelectionChanged"></ListBox>
+
+            <Label Content="Schip info" FontSize="40"/>
+            <DockPanel>
+                <Label Content="Lengte (in containers): " BorderBrush="Black" BorderThickness="0,1" FontSize="25" Height="50" Width="250" VerticalContentAlignment="Center"/>
+                <Rectangle Fill="Black" Width="1"/>
+                <TextBox Name="TbxShipLength" BorderBrush="Black" BorderThickness="0,1" FontSize="25" Height="50" Text="0" Padding="0,0,5,0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+            </DockPanel>
+            <DockPanel>
+                <Label Content="Breedte (in containers): " BorderBrush="Black" BorderThickness="0,1" FontSize="25" Height="50" Width="250" VerticalContentAlignment="Center"/>
+                <Rectangle Fill="Black" Width="1"/>
+                <TextBox Name="TbxShipWidth" BorderBrush="Black" BorderThickness="0,1" FontSize="25" Height="50" Text="0" Padding="0,0,5,0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+            </DockPanel>
+
+            <DockPanel>
+                <Button Name="BtnReset" BorderBrush="Black" BorderThickness="0,2,2,2" Content="Reset" FontSize="35" Height="60" Margin="0,10,0,0" Click="BtnReset_Click"/>
+                <Button Name="BtnCalculateLayout" BorderBrush="Black" BorderThickness="0,2" Content="Bereken indeling" FontSize="35" Height="60" Margin="0,10,0,0" Click="BtnCalculateLayout_Click"/>
+            </DockPanel>
+        </StackPanel>
+
+        <Rectangle Fill="Black" Width="2" Grid.Column="1"/>
+
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
             <StackPanel>
                 <Label Content="Indeling schip" FontSize="40"/>
-                <Rectangle Fill="Black" Height="5"/>
-                <Label Content="stacks ->" FontSize="30" HorizontalAlignment="Center"/>
-                <DockPanel>
-                    <Label Content="Rows ->" FontSize="30" Height="50" Margin="-35,0,-75,0" RenderTransformOrigin="0.5,0.5">
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="stacks ->" FontSize="30" HorizontalAlignment="Center" Grid.Column="1"/>
+                    <Label Content="Rows ->" FontSize="30" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Margin="-30,100,-30,100">
                         <Label.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -65,73 +96,85 @@
                             </TransformGroup>
                         </Label.RenderTransform>
                     </Label>
-                    <Border BorderBrush="Black" BorderThickness="1" Height="300" Width="1000">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Center" Height="300" Width="1000">
+                    <Border BorderBrush="Black" BorderThickness="1" Grid.Column="1" Grid.Row="1">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Height="250" HorizontalAlignment="Center">
                             <StackPanel Name="SpShipLayout" HorizontalAlignment="Left" VerticalAlignment="Center"></StackPanel>
                         </ScrollViewer>
                     </Border>
-                </DockPanel>
-                <DockPanel Height="440">
-                    <StackPanel Width="320">
-                        <Label Content="Extra schip info" FontSize="40"/>
-                        <DockPanel>
-                            <Label Content="Lengte: " FontSize="22" Width="200"/>
-                            <Label Name="LblLength" Content="" FontSize="22"/>
-                        </DockPanel>
-                        <DockPanel>
-                            <Label Content="Breedte: " FontSize="22" Width="200"/>
-                            <Label Name="LblWidth" Content="" FontSize="22"/>
-                        </DockPanel>
-                        <DockPanel>
-                            <Label Content="Gewicht links: " FontSize="22" Width="200"/>
-                            <Label Name="LblWeightLeftWing" Content="" FontSize="22"/>
-                        </DockPanel>
-                        <DockPanel>
-                            <Label Content="Gewicht rechts: " FontSize="22" Width="200"/>
-                            <Label Name="LblWeightRightWing" Content="" FontSize="22"/>
-                        </DockPanel>
-                        <DockPanel>
-                            <Label Content="Verschil in gewicht (%): " FontSize="22" Width="260"/>
-                            <Label Name="LblWeightDifference" Content="" FontSize="22"/>
-                        </DockPanel>
-                        <DockPanel>
-                            <Label Content="Totaal gewicht: " FontSize="22" Width="200"/>
-                            <Label Name="LblTotalWeight" Content="" FontSize="22"/>
-                        </DockPanel>
-                        <DockPanel>
-                            <Label Content="Geëist gewicht: " FontSize="22" Width="200"/>
-                            <Label Name="LblRequiredWeight" Content="" FontSize="22"/>
-                        </DockPanel>
-                        <DockPanel>
-                            <Label Content="Maximum gewicht: " FontSize="22" Width="200"/>
-                            <Label Name="LblMaxWeight" Content="" FontSize="22"/>
-                        </DockPanel>
-                        <DockPanel>
-                            <Label Content="Schip klaar voor vertrek: " FontSize="22" Width="260"/>
-                            <Label Name="LblAbleToGo" Content="" FontSize="22"/>
-                        </DockPanel>
-                    </StackPanel>
-                    <Rectangle Fill="Black" Width="1"/>
-                    <StackPanel Width="400">
-                        <Label Content="Geselecteerde stack" FontSize="40"/>
-                        <DockPanel>
-                            <Label Content="Rijnummer: " FontSize="22" Width="200"/>
-                            <Label Name="LblRowNumber" Content="" FontSize="22"/>
-                        </DockPanel>
-                        <DockPanel>
-                            <Label Content="Stacknummer: " FontSize="22" Width="200"/>
-                            <Label Name="LblStackNumber" Content="" FontSize="22"/>
-                        </DockPanel>
-                        <Label Content="Containers in stack:" FontSize="22"/>
-                        <ListBox Name="LbxSelectedStack" FontSize="22" Height="248"></ListBox>
-                    </StackPanel>
-                    <Rectangle Fill="Black" Width="1"/>
-                    <StackPanel>
-                        <Label Content="Overige containers" FontSize="40"/>
-                        <ListBox Name="LbxUnstorableContainers" FontSize="22" Height="378"></ListBox>
-                    </StackPanel>
-                </DockPanel>
+                </Grid>
             </StackPanel>
-        </DockPanel>
+
+            <Grid Grid.Row="1" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Label   Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Content="Extra schip info" FontSize="40"/>
+
+                <Label   Grid.Column="0" Grid.Row="1" Content="Lengte (in containers):"   FontSize="22"/>
+                <Label   Grid.Column="1" Grid.Row="1" Name="LblLength"                    FontSize="22"/>
+
+                <Label   Grid.Column="0" Grid.Row="2" Content="Breedte (in containers):"  FontSize="22"/>
+                <Label   Grid.Column="1" Grid.Row="2" Name="LblWidth"                     FontSize="22"/>
+
+                <Label   Grid.Column="0" Grid.Row="3" Content="Gewicht links:"            FontSize="22"/>
+                <Label   Grid.Column="1" Grid.Row="3" Name="LblWeightLeftWing"            FontSize="22"/>
+
+                <Label   Grid.Column="0" Grid.Row="4" Content="Gewicht rechts:"           FontSize="22"/>
+                <Label   Grid.Column="1" Grid.Row="4" Name="LblWeightRightWing"           FontSize="22"/>
+
+                <Label   Grid.Column="0" Grid.Row="5" Content="Verschil in gewicht (%):"  FontSize="22"/>
+                <Label   Grid.Column="1" Grid.Row="5" Name="LblWeightDifference"          FontSize="22"/>
+
+                <Label   Grid.Column="0" Grid.Row="6" Content="Totaal gewicht:"           FontSize="22"/>
+                <Label   Grid.Column="1" Grid.Row="6" Name="LblTotalWeight"               FontSize="22"/>
+
+                <Label   Grid.Column="0" Grid.Row="7" Content="Geëist gewicht:"           FontSize="22"/>
+                <Label   Grid.Column="1" Grid.Row="7" Name="LblRequiredWeight"            FontSize="22"/>
+
+                <Label   Grid.Column="0" Grid.Row="8" Content="Maximum gewicht:"          FontSize="22"/>
+                <Label   Grid.Column="1" Grid.Row="8" Name="LblMaxWeight" Content=""      FontSize="22"/>
+
+                <Label   Grid.Column="0" Grid.Row="9" Content="Schip klaar voor vertrek:" FontSize="22"/>
+                <Label   Grid.Column="1" Grid.Row="9" Name="LblAbleToGo"                  FontSize="22"/>
+
+                <Rectangle Grid.Column="2" Grid.Row="0" Grid.RowSpan="10" Fill="Black" Width="2" Margin="5,0"/>
+
+                <Label   Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="0" Content="Geselecteerde stack" FontSize="40"/>
+
+                <Label   Grid.Column="3" Grid.Row="1" Content="Rijnummer:" FontSize="22"/>
+                <Label   Grid.Column="4" Grid.Row="1" Name="LblRowNumber" FontSize="22"/>
+
+                <Label   Grid.Column="3" Grid.Row="2" Content="Stacknummer:" FontSize="22"/>
+                <Label   Grid.Column="4" Grid.Row="2" Name="LblStackNumber" FontSize="22"/>
+
+                <ListBox Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="3" Grid.RowSpan="7" Name="LbxSelectedStack" FontSize="22"/>
+
+                <Rectangle Grid.Column="5" Grid.Row="0" Grid.RowSpan="10" Fill="Black" Width="2" Margin="5,0"/>
+
+                <Label   Grid.Column="6" Grid.Row="0" Content="Overige containers" FontSize="40"/>
+                <ListBox Grid.Column="6" Grid.Row="1" Grid.RowSpan="9" Name="LbxUnstorableContainers" FontSize="22"/>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

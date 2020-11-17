@@ -27,32 +27,34 @@ namespace Containerschip
             Button btnPressed = (Button)sender;
             if (containerWeight != 0 && btnPressed.Name.Substring(3) is string containerName)
             {
-                switch (containerName)
-                {
-                    case nameof(ContainerNormal):
-                        {
-                            _containers.Add(new ContainerNormal(containerWeight));
-                            break;
-                        }
-                    case nameof(ContainerCoolable):
-                        {
-                            _containers.Add(new ContainerCoolable(containerWeight));
-                            break;
-                        }
-                    case nameof(ContainerValuable):
-                        {
-                            _containers.Add(new ContainerValuable(containerWeight));
-                            break;
-                        }
-                    case nameof(ContainerCoolableValuable):
-                        {
-                            _containers.Add(new ContainerCoolableValuable(containerWeight));
-                            break;
-                        }
-                }
+                _containers.Add(GetContainer(containerName, containerWeight));
                 UpdateListContent();
                 UpdateButtonContent(btnPressed, 1);
             }
+        }
+
+        private IContainer GetContainer(string containerName, int containerWeight)
+        {
+            switch (containerName)
+            {
+                case nameof(ContainerNormal):
+                    {
+                        return new ContainerNormal(containerWeight);
+                    }
+                case nameof(ContainerCoolable):
+                    {
+                        return new ContainerCoolable(containerWeight);
+                    }
+                case nameof(ContainerValuable):
+                    {
+                        return new ContainerValuable(containerWeight);
+                    }
+                case nameof(ContainerCoolableValuable):
+                    {
+                        return new ContainerCoolableValuable(containerWeight);
+                    }
+            }
+            return null;
         }
 
         private void BtnCalculateLayout_Click(object sender, RoutedEventArgs e)
@@ -93,16 +95,30 @@ namespace Containerschip
         {
             foreach (Button btn in GetButtons<Button>(SpShipLayout))
             {
-                btn.FontWeight = FontWeights.Normal;
+                btn.FontFamily = new FontFamily("Segoe UI Light");
             }
 
-            Button selectedStack = (Button)sender;
-            selectedStack.FontWeight = FontWeights.Bold;
-            string[] splitSelectedStackContent = selectedStack.Content.ToString().Split(' ')[1].Split('.');
+            Button clickedButton = (Button)sender;
+            clickedButton.FontFamily = new FontFamily("Segoe UI");
+            clickedButton.FontWeight = FontWeights.Bold;
+            string[] splitSelectedStackContent = clickedButton.Content.ToString().Split(' ')[1].Split('.');
 
             LblRowNumber.Content = splitSelectedStackContent[0];
             LblStackNumber.Content = splitSelectedStackContent[1];
-            LbxSelectedStack.ItemsSource = _ship.GetStack(selectedStack.Tag.ToString());
+            LbxSelectedStack.ItemsSource = _ship.GetStack(clickedButton.Tag.ToString());
+        }
+
+        private IEnumerable<T> GetButtons<T>(DependencyObject depObj)
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                if (child != null && child is T t)
+                    yield return t;
+
+                foreach (T childOfChild in GetButtons<T>(child))
+                    yield return childOfChild;
+            }
         }
 
         private void InitializeShip(int shipLength, int shipWidth)
@@ -177,7 +193,7 @@ namespace Containerschip
         private void ShowUnstorableContainers()
         {
             LbxUnstorableContainers.ItemsSource = null;
-            LbxUnstorableContainers.ItemsSource = _ship.GetUnstorableContainers();
+            LbxUnstorableContainers.ItemsSource = _ship.GetUnplacableContainers();
         }
 
         private void UpdateListContent()
@@ -202,26 +218,13 @@ namespace Containerschip
 
         private void UpdateButtonContent(string containerName)
         {
-            foreach (Button btn in GetButtons<Button>(DpButtons))
+            foreach (Button btn in grdButtons.Children)
             {
                 string[] splitContainerName = containerName.Split('.');
                 if (btn.Name.Substring(3) == splitContainerName[1])
                 {
                     UpdateButtonContent(btn, -1);
                 }
-            }
-        }
-
-        private IEnumerable<T> GetButtons<T>(DependencyObject depObj)
-        {
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
-            {
-                DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
-                if (child != null && child is T t)
-                    yield return t;
-
-                foreach (T childOfChild in GetButtons<T>(child))
-                    yield return childOfChild;
             }
         }
 
@@ -313,7 +316,7 @@ namespace Containerschip
             _containers.Clear();
             LbxContainers.ItemsSource = null;
 
-            foreach (Button btn in GetButtons<Button>(DpButtons))
+            foreach (Button btn in grdButtons.Children)
             {
                 try
                 {

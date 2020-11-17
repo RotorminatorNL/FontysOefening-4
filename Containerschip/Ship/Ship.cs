@@ -38,7 +38,7 @@ namespace Containerschip
 
             WeightDistribution();
 
-            TotalWeight = WeightLeftWing + WeightRightWing;
+            TotalWeight = GetWeightOfRows(0, _shipRows.Count);
             WeightDifferenceOfWings = GetWeightDifferenceOfWings();
             IsAbleToGo = CheckIfAbleToGo();
         }
@@ -52,13 +52,13 @@ namespace Containerschip
         {
             if (IsAmountShipRowsOdd())
             {
-                WeightLeftWing = GetWeightOfWing(0, _shipRows.Count / 2);
-                WeightRightWing = GetWeightOfWing((_shipRows.Count / 2) + 1, _shipRows.Count);
+                WeightLeftWing = GetWeightOfRows(0, _shipRows.Count / 2);
+                WeightRightWing = GetWeightOfRows((_shipRows.Count / 2) + 1, _shipRows.Count);
             }
             else
             {
-                WeightLeftWing = GetWeightOfWing(0, _shipRows.Count / 2);
-                WeightRightWing = GetWeightOfWing(_shipRows.Count / 2, _shipRows.Count);
+                WeightLeftWing = GetWeightOfRows(0, _shipRows.Count / 2);
+                WeightRightWing = GetWeightOfRows(_shipRows.Count / 2, _shipRows.Count);
             }
         }
 
@@ -167,7 +167,7 @@ namespace Containerschip
             return output;
         }
 
-        private int GetWeightOfWing(int beginWing, int endWing)
+        private int GetWeightOfRows(int beginWing, int endWing)
         {
             int output = 0;
             for (int i = beginWing; i < endWing; i++)
@@ -211,7 +211,7 @@ namespace Containerschip
             return _shipRows[stackRow].GetStack(stackNumber);
         }
 
-        public IReadOnlyCollection<IContainer> GetUnstorableContainers()
+        public IReadOnlyCollection<IContainer> GetUnplacableContainers()
         {
             return _unplacableContainers.AsReadOnly();
         }
