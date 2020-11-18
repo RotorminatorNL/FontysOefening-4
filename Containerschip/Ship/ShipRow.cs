@@ -38,11 +38,17 @@ namespace Containerschip
         {
             foreach (ContainerStack stack in _containerStacks)
             {
-                if (IsStackAvialable(_containerStacks.IndexOf(stack), stack.GetContainers().Count + 1, container) && stack.AddContainerToList(container))
-                {
-                    Weight += container.Weight;
-                    return true;
-                }
+                return IsContainerAdded(stack, container);
+            }
+            return false;
+        }
+
+        private bool IsContainerAdded(ContainerStack stack, IContainer container)
+        {
+            if (IsStackAvialable(_containerStacks.IndexOf(stack), stack.GetContainers().Count + 1, container) && stack.AddContainerToList(container))
+            {
+                Weight += container.Weight;
+                return true;
             }
             return false;
         }
