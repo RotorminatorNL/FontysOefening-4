@@ -173,7 +173,7 @@
                 <Rectangle Grid.Column="5" Grid.Row="0" Grid.RowSpan="10" Fill="Black" Width="2" Margin="5,0"/>
 
                 <Label   Grid.Column="6" Grid.Row="0" Content="Overige containers" FontSize="40"/>
-                <ListBox Grid.Column="6" Grid.Row="1" Grid.RowSpan="9" Name="LbxUnstorableContainers" FontSize="22"/>
+                <ListBox Grid.Column="6" Grid.Row="1" Grid.RowSpan="9" Name="LbxUnstorableContainers" FontSize="22" MaxHeight="350px"/>
             </Grid>
         </Grid>
     </Grid>

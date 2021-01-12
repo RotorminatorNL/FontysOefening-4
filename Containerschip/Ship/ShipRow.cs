@@ -38,7 +38,10 @@ namespace Containerschip
         {
             foreach (ContainerStack stack in _containerStacks)
             {
-                return IsContainerAdded(stack, container);
+                if (IsContainerAdded(stack, container))
+                {
+                    return true;
+                }
             }
             return false;
         }
